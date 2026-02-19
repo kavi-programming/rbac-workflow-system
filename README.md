@@ -1,61 +1,179 @@
-# CodeIgniter 4 Framework
+# RBAC Workflow Management System (CodeIgniter 4)
 
-## What is CodeIgniter?
+A Role-Based Access Control (RBAC) Workflow Management System built using CodeIgniter 4.
+This system allows **Users, Managers, and Admins** to manage and track workflow requests with proper authorization, logging, and status transitions.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🚀 Project Overview
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+This application implements a structured workflow system where:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+* Users can create and manage requests.
+* Managers can review and approve/reject requests.
+* Admins can close/reopen requests and view full history.
+* All status transitions are validated and logged.
+* Role-based permissions are strictly enforced.
 
-## Important Change with index.php
+---
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🛠 Built With
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+* PHP 8+
+* CodeIgniter 4
+* MySQL
+* Bootstrap 5
+* AJAX (for filtering & sorting)
 
-**Please** read the user guide for a better explanation of how CI4 works!
+---
 
-## Repository Management
+## 👥 Roles & Permissions
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+### 👤 User
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+* Create request
+* Edit request (only when status = Needs Clarification)
+* Resubmit request
+* View own requests
+* Filter & sort requests
 
-## Contributing
+### 👨‍💼 Manager
 
-We welcome contributions from the community.
+* View submitted requests
+* Approve
+* Reject
+* Mark as "Needs Clarification"
+* Filter by category, priority & status
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+### 👨‍💻 Admin
 
-## Server Requirements
+* Close request
+* Reopen request
+* View full request history logs
+* Filter by role, status & date range
+* Soft delete requests
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+---
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## 🔄 Workflow Status Flow
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+Submitted
+→ Approved / Rejected / Needs Clarification
+→ Closed / Reopened
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+All transitions are validated via `StatusTransitionModel`.
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+---
+
+## 🗂 Project Structure
+
+```
+app/
+├── Controllers/
+│   ├── Auth.php
+│   ├── RequestController.php
+│
+├── Models/
+│   ├── RequestModel.php
+│   ├── LogModel.php
+│   ├── StatusTransitionModel.php
+│   ├── UserModel.php
+│
+├── Views/
+│   ├── dashboards/
+│   ├── auth/
+│   ├── partials/
+│   ├── admin/
+│
+public/
+writable/
+.env
+queries.sql
+```
+
+---
+
+## 🔐 Security Features
+
+* CSRF Protection
+* Server-side validation
+* Role-based route filters
+* Status transition validation
+* Password hashing
+* Session-based authentication
+
+---
+
+## 📊 Features
+
+* AJAX-based filtering & sorting
+* Date range filtering (Admin)
+* Status logs for every transition
+* Resubmission tracking
+* Pagination
+* Flash messages
+* Soft delete functionality
+
+---
+
+## ⚙ Installation Guide
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/yourusername/rbac-workflow-system.git
+cd rbac-workflow-system
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+composer install
+```
+
+### 3️⃣ Setup Environment
+
+Copy `.env` file and configure database:
+
+```ini
+database.default.hostname = localhost
+database.default.database = your_database
+database.default.username = root
+database.default.password =
+database.default.DBDriver = MySQLi
+```
+
+### 4️⃣ Import Database
+
+Use the provided `queries.sql` file.
+Import into MySQL using **phpMyAdmin** or CLI:
+
+```bash
+mysql -u root -p your_database < queries.sql
+```
+
+### 5️⃣ Run Project
+
+#### Using WAMP:
+
+1. Place the project inside `C:/wamp64/www/` (or your WAMP `www` folder).
+2. Start WAMP and ensure Apache & MySQL services are running.
+3. Access the project in browser:
+
+```
+http://localhost/rbac_workflow/public
+```
+
+#### Using Built-in PHP Server:
+
+```bash
+php spark serve
+```
+
+---
+
+✅ **Notes:**
+
+* Make sure PHP version ≥ 8.0.
+* Ensure `writable/` folder has proper permissions.
+* Adjust `.env` DB credentials based on your setup.
