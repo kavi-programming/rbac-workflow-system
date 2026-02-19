@@ -1,6 +1,6 @@
 # RBAC Workflow Management System (CodeIgniter 4)
 
-A Role-Based Access Control (RBAC) Workflow Management System built using CodeIgniter 4.
+A Role-Based Access Control (RBAC) based Workflow Management System built using CodeIgniter 4, implementing secure request handling, controlled status transitions, and activity logging.
 This system allows **Users, Managers, and Admins** to manage and track workflow requests with proper authorization, logging, and status transitions.
 
 ---
@@ -58,8 +58,10 @@ This application implements a structured workflow system where:
 ## 🔄 Workflow Status Flow
 
 Submitted
-→ Approved / Rejected / Needs Clarification
-→ Closed / Reopened
+│
+├── Approved → Closed
+├── Rejected
+└── Needs Clarification → Resubmitted → Approved
 
 All transitions are validated via `StatusTransitionModel`.
 
@@ -70,7 +72,10 @@ All transitions are validated via `StatusTransitionModel`.
 ```
 app/
 ├── Controllers/
+│   ├── Admin.php
 │   ├── Auth.php
+│   ├── BaseController.php
+│   ├── Dashboard.php
 │   ├── RequestController.php
 │
 ├── Models/
@@ -80,10 +85,11 @@ app/
 │   ├── UserModel.php
 │
 ├── Views/
+│   ├── admin/
 │   ├── dashboards/
 │   ├── auth/
 │   ├── partials/
-│   ├── admin/
+│   ├── layouts/
 │
 public/
 writable/
@@ -104,6 +110,17 @@ queries.sql
 
 ---
 
+## 🏗 System Architecture
+
+The system follows MVC architecture provided by CodeIgniter 4:
+
+- Controllers handle request processing and role validation.
+- Models manage database interaction and business logic.
+- Views render dynamic UI using Bootstrap.
+- AJAX is used for asynchronous filtering and sorting.
+
+---
+
 ## 📊 Features
 
 * AJAX-based filtering & sorting
@@ -113,6 +130,15 @@ queries.sql
 * Pagination
 * Flash messages
 * Soft delete functionality
+
+---
+
+## 🗄 Database Tables
+
+- users
+- requests
+- logs
+- status_transitions
 
 ---
 
